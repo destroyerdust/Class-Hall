@@ -48,6 +48,9 @@ function ClassHall:OnInitialize()
     end)
 
     self:Print("ClassHall Initialized")
+
+    ClassHall.db.char.followers = C_Garrison.GetFollowers()
+    self:Print("ClassHall Followers Loaded")
 end
 
 ---------------------------------------------
@@ -60,9 +63,6 @@ function ClassHall:OnEnable()
         icon:Register("ClassHall", dataobj, self.db.profile.icon)
     end
 	self:Print("ClassHall Enabled")
-
-    self.db.char.followers = C_Garrison.GetFollowers()
-    self:Print("ClassHall Followers Loaded")
 end
 
 ---------------------------------------------
@@ -83,6 +83,12 @@ function dataobj:OnEnter()
     GameTooltip:AddLine("ClassHall Information", 0, 1, 0)
 
     GameTooltip:AddLine("Order Resources - " .. amount)
+
+    -- Temp Fix for Initialization Fail
+    if ClassHall.db.char.followers == nil then
+        ClassHall.db.char.followers = C_Garrison.GetFollowers()
+        ClassHall:Print("Had to load not in Initialization")
+    end
 
     for i, follower in ipairs(ClassHall.db.char.followers) do
       --ClassHall:Print(follower.name)
