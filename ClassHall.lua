@@ -90,10 +90,17 @@ function dataobj:OnEnter()
         ClassHall:Print("Had to load not in Initialization")
     end
 
+    GameTooltip:AddLine(" ")
+    GameTooltip:AddLine("Followers: ")
+
     for i, follower in ipairs(ClassHall.db.char.followers) do
       --ClassHall:Print(follower.name)
-      if follower.isCollected then   
-        GameTooltip:AddLine("Follower - " .. follower.name)
+      if follower.isCollected then
+        if follower.isTroop then
+            GameTooltip:AddLine(follower.name .. " - Durability: " .. follower.durability .. "/" .. follower.maxDurability)
+        else
+            GameTooltip:AddLine(follower.name)
+        end
       end
     end
 
