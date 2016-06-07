@@ -1,6 +1,3 @@
-Class Hall
-=========
-
 Class Hall WoW Addon
 =======
 # Class-Hall
