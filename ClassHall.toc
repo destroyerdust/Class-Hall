@@ -1,0 +1,15 @@
+## Interface: 60200
+## Title: ClassHall Addon
+## Notes: This addon will reskin class hall crap
+## Author: Sean Barkley
+## Website: www.seanbarkley.com
+## Version: 0.1
+## SavedVariables: ClassHallDB
+## OptionalDeps: Ace3
+## X-Embeds: Ace3
+
+embeds.xml
+
+enUS.lua
+
+ClassHall.lua
