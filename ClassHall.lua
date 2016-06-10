@@ -62,6 +62,33 @@ function ClassHall:OnEnable()
         icon:Register("ClassHall", dataobj, self.db.profile.icon)
     end
 
+    self.db.char.followers = C_Garrison.GetFollowers()
+    self:Debug("OnEnable - Followers Loaded")
+
+    self:DisableOrderHallBar()
+    self:Debug("OnEnable - Disabled Class Hall Bar")
+
+    self:RegisterEvent("ZONE_CHANGED")
+    self:RegisterEvent("GARRISON_FOLLOWER_CATEGORIES_UPDATED")
+    self:Debug("OnEnable - Events Registered")
+
+	self:Debug("OnEnable - Enabled")
+end
+
+function ClassHall:ZONE_CHANGED()
+    self:DisableOrderHallBar()
+    self:Debug("ZONE_CHANGED - Disabled Class Hall Bar")
+end
+
+function ClassHall:GARRISON_FOLLOWER_CATEGORIES_UPDATED()
+    self:DisableOrderHallBar()
+    self:Debug("GARRISON_FOLLOWER_CATEGORIES_UPDATED - Disabled Class Hall Bar")
+end
+
+---------------------------------------------
+-- Unregister Events
+---------------------------------------------
+function ClassHall:DisableOrderHallBar()
     -- Hide Bar
     local f = CreateFrame("Frame")
     f:SetScript("OnUpdate", function(self,...)
@@ -73,15 +100,16 @@ function ClassHall:OnEnable()
     self:SetScript("OnUpdate", nil)
     end)
 
-    ClassHall.db.char.followers = C_Garrison.GetFollowers()
-    self:Debug("Followers Loaded")
-	self:Debug("Enabled")
+    self:Debug("DisableOrderHallBar - Disabled Class Hall Bar")
 end
 
 ---------------------------------------------
 -- Unregister Events
 ---------------------------------------------
 function ClassHall:OnDisable()
+    self:UnregisterEvent("ZONE_CHANGED")
+    self:UnregisterEvent("GARRISON_FOLLOWER_CATEGORIES_UPDATED")
+    self:Debug("OnDisable - Unregistered Events")
 end
 
 ---------------------------------------------
@@ -105,6 +133,7 @@ function ClassHall:ChatCommand(input)
 end
 
 function dataobj:OnEnter()
+    ClassHall:Debug("dataobj:OnEnter - Mouse In")
     GameTooltip:SetOwner(self, "ANCHOR_NONE")
     GameTooltip:SetPoint("TOPLEFT", self, "BOTTOMLEFT")
     GameTooltip:ClearLines()
@@ -117,7 +146,7 @@ function dataobj:OnEnter()
     GameTooltip:AddLine("Order Resources - " .. amount)
 
     ClassHall.db.char.followers = C_Garrison.GetFollowers()
-    ClassHall:Debug("Loaded Followers")
+    ClassHall:Debug("dataobj:OnEnter - Loaded Followers")
 
     GameTooltip:AddLine(" ")
     GameTooltip:AddLine("Followers: ")
@@ -138,4 +167,5 @@ end
 
 function dataobj:OnLeave()
     GameTooltip:Hide()
+    ClassHall:Debug("dataobj:OnLeave - Mouse Out")
 end
