@@ -83,7 +83,6 @@ function ClassHall:DisableOrderHallBar()
             OrderHallCommandBar:UnregisterAllEvents()
             OrderHallCommandBar.Show = function() end
         end
-        OrderHall_LoadUI = function() end
         OrderHall_CheckCommandBar = function () end
     self:SetScript("OnUpdate", nil)
     end)
