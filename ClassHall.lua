@@ -17,14 +17,23 @@ ClassHall.options = {
     handler = ClassHall,
     type = 'group',
     args = {
+        debug = {
+            type = "toggle",
+            name = L["Enable/Disable Debug"],
+            desc = L["Enables or Disables Debug Printouts"],
+            get  = function() return ClassHall.db.profile.debug end,
+            set  = function(_, value) ClassHall.db.profile.debug = value end,
+            order = 1,
+        }
     },
 }
 
 ---------------------------------------------
 -- Message and enable option defaults
 ---------------------------------------------
-local defaults = {
+ClassHall.defaults = {
     profile = {
+        debug = false,
     },
 }
 
@@ -32,9 +41,26 @@ local defaults = {
 -- Initilize 
 ---------------------------------------------
 function ClassHall:OnInitialize()
-    self.db = LibStub("AceDB-3.0"):New("ClassHallDB", defaults, true)
+    self.db = LibStub("AceDB-3.0"):New("ClassHallDB", self.defaults, true)
 
     LibStub("AceConfig-3.0"):RegisterOptionsTable("ClassHall", self.options, {"ClassHall", "ClassHall"})
+    self.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("ClassHall", "ClassHall")
+
+    self:RegisterChatCommand("ch", "ChatCommand")
+    self:RegisterChatCommand("classhall", "ChatCommand")
+
+    self:Debug("Initialized")
+end
+
+---------------------------------------------
+-- Enable Event Registration
+---------------------------------------------
+function ClassHall:OnEnable()
+
+    -- Minimap button.
+    if icon and not icon:IsRegistered("ClassHall") then
+        icon:Register("ClassHall", dataobj, self.db.profile.icon)
+    end
 
     -- Hide Bar
     local f = CreateFrame("Frame")
@@ -47,22 +73,9 @@ function ClassHall:OnInitialize()
     self:SetScript("OnUpdate", nil)
     end)
 
-    self:Print("ClassHall Initialized")
-
     ClassHall.db.char.followers = C_Garrison.GetFollowers()
-    self:Print("ClassHall Followers Loaded")
-end
-
----------------------------------------------
--- Enable Event Registration
----------------------------------------------
-function ClassHall:OnEnable()
-
-    -- Minimap button.
-    if icon and not icon:IsRegistered("ClassHall") then
-        icon:Register("ClassHall", dataobj, self.db.profile.icon)
-    end
-	self:Print("ClassHall Enabled")
+    self:Debug("Followers Loaded")
+	self:Debug("Enabled")
 end
 
 ---------------------------------------------
@@ -71,6 +84,25 @@ end
 function ClassHall:OnDisable()
 end
 
+---------------------------------------------
+-- Debug Printout Function
+---------------------------------------------
+function ClassHall:Debug(string)
+    if self.db.profile.debug then
+        self:Print(string)
+    end
+end
+
+---------------------------------------------
+-- Slash Command Function
+---------------------------------------------
+function ClassHall:ChatCommand(input)
+    if not input or input:trim() == "" then
+        InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
+    else
+        LibStub("AceConfigCmd-3.0"):HandleCommand("ch", "ClassHall", input)
+    end
+end
 
 function dataobj:OnEnter()
     GameTooltip:SetOwner(self, "ANCHOR_NONE")
@@ -84,11 +116,8 @@ function dataobj:OnEnter()
 
     GameTooltip:AddLine("Order Resources - " .. amount)
 
-    -- Temp Fix for Initialization Fail
-    if ClassHall.db.char.followers == nil then
-        ClassHall.db.char.followers = C_Garrison.GetFollowers()
-        ClassHall:Print("Had to load not in Initialization")
-    end
+    ClassHall.db.char.followers = C_Garrison.GetFollowers()
+    ClassHall:Debug("Loaded Followers")
 
     GameTooltip:AddLine(" ")
     GameTooltip:AddLine("Followers: ")
