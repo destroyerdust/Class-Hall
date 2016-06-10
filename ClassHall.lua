@@ -68,21 +68,7 @@ function ClassHall:OnEnable()
     self:DisableOrderHallBar()
     self:Debug("OnEnable - Disabled Class Hall Bar")
 
-    self:RegisterEvent("ZONE_CHANGED")
-    self:RegisterEvent("GARRISON_FOLLOWER_CATEGORIES_UPDATED")
-    self:Debug("OnEnable - Events Registered")
-
 	self:Debug("OnEnable - Enabled")
-end
-
-function ClassHall:ZONE_CHANGED()
-    self:DisableOrderHallBar()
-    self:Debug("ZONE_CHANGED - Disabled Class Hall Bar")
-end
-
-function ClassHall:GARRISON_FOLLOWER_CATEGORIES_UPDATED()
-    self:DisableOrderHallBar()
-    self:Debug("GARRISON_FOLLOWER_CATEGORIES_UPDATED - Disabled Class Hall Bar")
 end
 
 ---------------------------------------------
@@ -97,6 +83,8 @@ function ClassHall:DisableOrderHallBar()
             OrderHallCommandBar:UnregisterAllEvents()
             OrderHallCommandBar.Show = function() end
         end
+        OrderHall_LoadUI = function() end
+        OrderHall_CheckCommandBar = function () end
     self:SetScript("OnUpdate", nil)
     end)
 
@@ -107,8 +95,6 @@ end
 -- Unregister Events
 ---------------------------------------------
 function ClassHall:OnDisable()
-    self:UnregisterEvent("ZONE_CHANGED")
-    self:UnregisterEvent("GARRISON_FOLLOWER_CATEGORIES_UPDATED")
     self:Debug("OnDisable - Unregistered Events")
 end
 
