@@ -62,7 +62,7 @@ function ClassHall:OnEnable()
         icon:Register("ClassHall", dataobj, self.db.profile.icon)
     end
 
-    self.db.char.followers = C_Garrison.GetFollowers(1)
+    self.db.char.followers = C_Garrison.GetFollowers()
     self:Debug("OnEnable - Followers Loaded")
 
     self:DisableOrderHallBar()
@@ -130,7 +130,7 @@ function dataobj:OnEnter()
 
     GameTooltip:AddLine("Order Resources - " .. amount)
 
-    ClassHall.db.char.followers = C_Garrison.GetFollowers(1)
+    ClassHall.db.char.followers = C_Garrison.GetFollowers()
     ClassHall:Debug("dataobj:OnEnter - Loaded Followers")
 
     GameTooltip:AddLine(" ")
