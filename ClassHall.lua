@@ -62,13 +62,13 @@ function ClassHall:OnEnable()
         icon:Register("ClassHall", dataobj, self.db.profile.icon)
     end
 
-    self.db.char.followers = C_Garrison.GetFollowers()
+    self.db.char.followers = C_Garrison.GetFollowers(1)
     self:Debug("OnEnable - Followers Loaded")
 
     self:DisableOrderHallBar()
     self:Debug("OnEnable - Disabled Class Hall Bar")
 
-	self:Debug("OnEnable - Enabled")
+    self:Debug("OnEnable - Enabled")
 end
 
 ---------------------------------------------
@@ -130,7 +130,7 @@ function dataobj:OnEnter()
 
     GameTooltip:AddLine("Order Resources - " .. amount)
 
-    ClassHall.db.char.followers = C_Garrison.GetFollowers()
+    ClassHall.db.char.followers = C_Garrison.GetFollowers(1)
     ClassHall:Debug("dataobj:OnEnter - Loaded Followers")
 
     GameTooltip:AddLine(" ")
@@ -139,10 +139,12 @@ function dataobj:OnEnter()
     for i, follower in ipairs(ClassHall.db.char.followers) do
       --ClassHall:Print(follower.name)
       if follower.isCollected then
-        if follower.isTroop then
-            GameTooltip:AddLine(follower.name .. " - Durability: " .. follower.durability .. "/" .. follower.maxDurability)
-        else
-            GameTooltip:AddLine(follower.name)
+        if follower.followerTypeId == 4 then
+            if follower.isTroop then
+                GameTooltip:AddLine(follower.name .. " - Durability: " .. follower.durability .. "/" .. follower.maxDurability)
+            else
+                GameTooltip:AddLine(follower.name)
+            end
         end
       end
     end
