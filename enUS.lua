@@ -7,3 +7,5 @@ L["ch"] = true
 L["Enable/Disable Debug"] = true
 L["Enables or Disables Debug Printouts"] = true
 
+L["Show/Hide Icon"] = true
+L["Shows or Hides minimap icon"] = true

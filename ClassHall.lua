@@ -24,6 +24,15 @@ ClassHall.options = {
             get  = function() return ClassHall.db.profile.debug end,
             set  = function(_, value) ClassHall.db.profile.debug = value end,
             order = 1,
+        },
+        icon = {
+            type = "toggle",
+            name = L["Show/Hide Icon"],
+            desc = L["Shows or Hides minimap icon"],
+            get = function() return ClassHall.db.profile.icon.hide end,
+            set = function(_, value) ClassHall.db.profile.icon.hide = value end,
+            order = 1,
+
         }
     },
 }
@@ -34,6 +43,9 @@ ClassHall.options = {
 ClassHall.defaults = {
     profile = {
         debug = false,
+        icon  = {
+            hide = true,
+        }
     },
 }
 
@@ -46,7 +58,9 @@ function ClassHall:OnInitialize()
     LibStub("AceConfig-3.0"):RegisterOptionsTable("ClassHall", self.options, {"ClassHall", "ClassHall"})
     self.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("ClassHall", "ClassHall")
 
-    self:RegisterChatCommand("ch", "ChatCommand")
+    --icon:Register("ClassHall", dataobj, self.db.profile.icon)
+
+    self:RegisterChatCommand("ch", "HideTheIcon")
     self:RegisterChatCommand("classhall", "ChatCommand")
 
     self:Debug("Initialized")
@@ -67,6 +81,7 @@ function ClassHall:OnEnable()
 
     self:DisableOrderHallBar()
     self:Debug("OnEnable - Disabled Class Hall Bar")
+
 
     self:Debug("OnEnable - Enabled")
 end
@@ -105,6 +120,18 @@ function ClassHall:Debug(string)
         self:Print(string)
     end
 end
+---------------------------------------------
+-- Slash Command Function
+---------------------------------------------
+function ClassHall:HideTheIcon(input)
+    self.db.profile.icon.hide = not self.db.profile.icon.hide
+    if self.db.profile.icon.hide then
+        icon:Hide("ClassHall")
+    else
+        icon:Show("ClassHall")
+    end
+end
+
 
 ---------------------------------------------
 -- Slash Command Function
