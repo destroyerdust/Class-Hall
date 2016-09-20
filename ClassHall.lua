@@ -50,7 +50,7 @@ ClassHall.defaults = {
 }
 
 ---------------------------------------------
--- Initilize 
+-- Initilize
 ---------------------------------------------
 function ClassHall:OnInitialize()
     self.db = LibStub("AceDB-3.0"):New("ClassHallDB", self.defaults, true)
@@ -87,6 +87,13 @@ function ClassHall:OnEnable()
 end
 
 ---------------------------------------------
+-- OnClick for Minimap Icon & ElvUI Datatext
+---------------------------------------------
+function dataobj:OnClick()
+    GarrisonLandingPage_Toggle()
+end
+
+---------------------------------------------
 -- Unregister Events
 ---------------------------------------------
 function ClassHall:DisableOrderHallBar()
@@ -99,7 +106,7 @@ function ClassHall:DisableOrderHallBar()
             OrderHallCommandBar.Show = function() end
         end
         OrderHall_CheckCommandBar = function () end
-    self:SetScript("OnUpdate", nil)
+        self:SetScript("OnUpdate", nil)
     end)
 
     self:Debug("DisableOrderHallBar - Disabled Class Hall Bar")
@@ -164,16 +171,16 @@ function dataobj:OnEnter()
     GameTooltip:AddLine("Followers: ")
 
     for i, follower in ipairs(ClassHall.db.char.followers) do
-      --ClassHall:Print(follower.name)
-      if follower.isCollected then
-        if follower.followerTypeID == 4 then
-            if follower.isTroop then
-                GameTooltip:AddLine(follower.name .. " - Durability: " .. follower.durability .. "/" .. follower.maxDurability)
-            else
-                GameTooltip:AddLine(follower.name)
+        --ClassHall:Print(follower.name)
+        if follower.isCollected then
+            if follower.followerTypeID == 4 then
+                if follower.isTroop then
+                    GameTooltip:AddLine(follower.name .. " - Durability: " .. follower.durability .. "/" .. follower.maxDurability)
+                else
+                    GameTooltip:AddLine(follower.name)
+                end
             end
         end
-      end
     end
 
     GameTooltip:Show()
